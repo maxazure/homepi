@@ -131,7 +131,7 @@
         
         // 格式化星期几
         const weekdayOptions = { weekday: 'long' };
-        weekdayElement.textContent = nzTime.toLocaleDateString('zh-CN', weekdayOptions);
+        weekdayElement.textContent = nzTime.toLocaleDateString('en-US', weekdayOptions);
         
         // 格式化日期
         const dateOptions = { 
@@ -139,7 +139,7 @@
           month: 'long', 
           day: 'numeric' 
         };
-        dateElement.textContent = nzTime.toLocaleDateString('zh-CN', dateOptions);
+        dateElement.textContent = nzTime.toLocaleDateString('en-US', dateOptions);
         
         // 格式化时间
         const hours = nzTime.getHours().toString().padStart(2, '0');
