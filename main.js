@@ -19,10 +19,8 @@ function createWindow() {
     }
   });
 
+  // 加载初始HTML
   mainWindow.loadFile('index.html');
-  mainWindow.webContents.reloadIgnoringCache();
-
-  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', function () {
     mainWindow = null;
