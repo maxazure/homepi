@@ -16,7 +16,7 @@ function createWindow() {
   });
   // 加载index.html
   mainWindow.loadFile('index.html');
-
+  mainWindow.webContents.reloadIgnoringCache();
   // 打开开发者工具（可选）
   // mainWindow.webContents.openDevTools();
 
