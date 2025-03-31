@@ -5,6 +5,8 @@
     <title>壁纸显示程序</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500&display=swap');
+      
       body {
         margin: 0;
         padding: 0;
@@ -20,9 +22,64 @@
         object-fit: cover;
         transition: opacity 0.5s ease-in-out;
       }
+
+      #clock-container {
+        position: fixed;
+        top: 40px;
+        left: 40px;
+        z-index: 1000;
+        color: rgba(255, 255, 255, 0.8);
+        font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 30px 50px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        letter-spacing: -1px;
+        width: 400px;
+        text-align: center;
+      }
+
+      #weekday {
+        font-size: 1.8rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      #date {
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 15px;
+      }
+
+      #time {
+        font-size: 5rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1;
+        letter-spacing: -2px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+
+      #time span {
+        font-weight: 500;
+      }
     </style>
   </head>
   <body>
+    <div id="clock-container">
+      <div id="weekday"></div>
+      <div id="date"></div>
+      <div id="time"></div>
+    </div>
     <img id="wallpaper" src="" alt="壁纸">
     <script>
       const { ipcRenderer } = require('electron');
@@ -63,11 +120,46 @@
         }
       }
 
+      // 更新时钟显示
+      function updateClock() {
+        const now = new Date();
+        const nzTime = new Date(now.toLocaleString('en-US', { timeZone: 'Pacific/Auckland' }));
+        
+        const weekdayElement = document.getElementById('weekday');
+        const dateElement = document.getElementById('date');
+        const timeElement = document.getElementById('time');
+        
+        // 格式化星期几
+        const weekdayOptions = { weekday: 'long' };
+        weekdayElement.textContent = nzTime.toLocaleDateString('zh-CN', weekdayOptions);
+        
+        // 格式化日期
+        const dateOptions = { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        };
+        dateElement.textContent = nzTime.toLocaleDateString('zh-CN', dateOptions);
+        
+        // 格式化时间
+        const hours = nzTime.getHours().toString().padStart(2, '0');
+        const minutes = nzTime.getMinutes().toString().padStart(2, '0');
+        const seconds = nzTime.getSeconds().toString().padStart(2, '0');
+        
+        timeElement.innerHTML = `${hours}<span>:</span>${minutes}<span>:</span>${seconds}`;
+      }
+
       // 设置定时器，每5分钟更换一次壁纸
       setInterval(changeWallpaper, 5 * 60 * 1000);
 
+      // 设置定时器，每秒更新一次时钟
+      setInterval(updateClock, 1000);
+
       // 初始加载一张壁纸
       changeWallpaper();
+      
+      // 初始更新时钟
+      updateClock();
     </script>
   </body>
 </html>
